@@ -21,9 +21,7 @@ public class WebDriverFactory {
             case "chrome":
 
                 driver = new ChromeDriver();
-                // ChromeOptions options = new ChromeOptions();
-                //driver = new ChromeDriver(options);
-                break;
+                 break;
             case "firefox":
                 driver = new FirefoxDriver();
                 break;

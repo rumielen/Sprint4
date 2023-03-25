@@ -2,11 +2,12 @@ package pages;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.By;
-import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static io.ous.jtoml.impl.Token.TokenType.Key;
+import static org.junit.Assert.*;
 
 
 public class OrderPage {
@@ -18,7 +19,8 @@ public class OrderPage {
     private final By metroStationList = (By.xpath(".//div[@class='select-search__select']"));
     private final By phoneField = (By.xpath(".//div/input[@placeholder='* Телефон: на него позвонит курьер']"));
     private final By nextButton = (By.xpath(".//button[@class='Button_Button__ra12g Button_Middle__1CSJM']"));
-    private final By calendarField = (By.xpath(".//input[@placeholder='* Когда привезти самокат']"));
+    private final By scooterDeliveryDate = (By.xpath(".//input[@placeholder='* Когда привезти самокат']"));
+    private final By calendarFieldChooseDate = (By.xpath(".//input[@class='react-datepicker__month']"));
     private final By fieldRentalPeriod = (By.xpath(".//div[@class='Dropdown-placeholder']"));
     private final By rentPeriodList = (By.xpath(".//div[@class='Dropdown-menu']"));
     private final By scooterBlackColor = (By.xpath(".//label[@for='black']"));
@@ -31,71 +33,95 @@ public class OrderPage {
         this.driver = driver;
     }
 
-    //метод для заполнения полей Имя, Фамилия, Адрес, Телефон
-    // проверяет открытость поля, удаяет текст из поля, вводит новое значение из параметра
 
-    //заполнить поле Имя
-    public OrderPage setName(String clientName) {
+    public OrderPage checkNameEnabled() {
         //проверка открытости поля
-        Assert.assertTrue(driver.findElement(nameField).isEnabled());
-        // ввод нового значения
+        assertTrue(driver.findElement(nameField).isEnabled());
+        return this;
+
+    }
+
+    public OrderPage setName(String clientName) {
         driver.findElement(nameField).sendKeys(clientName);
         return this;
     }
 
-    //заполнить поле Фамилия
+    public OrderPage checkSurnameEnabled() {
+        assertTrue(driver.findElement(surnameField).isEnabled());
+        return this;
+    }
+
     public OrderPage setSurname(String clientSurname) {
-        //проверка открытости поля
-        Assert.assertTrue(driver.findElement(surnameField).isEnabled());
         // ввод нового значения
         driver.findElement(surnameField).sendKeys(clientSurname);
         return this;
     }
-    //заполнить поле Адрес
-    public OrderPage setAddress(String clientAddress) {
+
+    public OrderPage checkAddressEnabled() {
         //проверка открытости поля
-        Assert.assertTrue(driver.findElement(addressField).isEnabled());
+        assertTrue(driver.findElement(addressField).isEnabled());
+        return this;
+    }
+    public OrderPage setAddress(String clientAddress) {
         // ввод нового значения
         driver.findElement(addressField).sendKeys(clientAddress);
         return this;
     }
 
-    // выбрать станцию метро
+    public OrderPage checkMetroEnabled() {
+        assertTrue(driver.findElement(metroField).isEnabled());
+        return this;
+    }
+
     public OrderPage setMetro(String clientMetro) {
 
         driver.findElement(metroField).click();
         List<WebElement> elements = driver.findElements(metroStationList);
         for (WebElement element : elements) {
-            element.findElement(By.xpath(clientMetro)).click();
+            if (element.getText().contains(clientMetro)) {
+                element.click();
+            }
         }
         return this;
     }
 
-    public OrderPage setPhone(String clientPhone) {
+
+    public OrderPage checkPhoneEnabled() {
         //проверка открытости поля
-        Assert.assertTrue(driver.findElement(phoneField).isEnabled());
+        assertTrue(driver.findElement(phoneField).isEnabled());
+        return this;
+    }
+
+    public OrderPage setPhone(String clientPhone) {
         // ввод нового значения
         driver.findElement(phoneField).sendKeys(clientPhone);
         return this;
     }
 
-    public OrderPage setDeliveryDate(String clientDeliveryDate) {
 
-        driver.findElement(calendarField).click();
-        driver.findElement(By.xpath(clientDeliveryDate)).click();
+        public OrderPage setDeliveryDate(String clientDeliveryDate) {
+            driver.findElement(scooterDeliveryDate).click();
+            driver.findElement(scooterDeliveryDate).sendKeys(clientDeliveryDate);
+            driver.findElement(By.className("App_App__15LM-")).click();
 
         return this;
     }
+
+
 
     public OrderPage setRentPeriod(String clientRentPeriod) {
 
         driver.findElement(fieldRentalPeriod).click();
         List<WebElement> elements = driver.findElements(rentPeriodList);
         for (WebElement element : elements) {
-            element.findElement(By.xpath(clientRentPeriod)).click();
+            if (element.getText().contains(clientRentPeriod)) {
+                element.click();
+            }
+
         }
         return this;
     }
+
 
     public OrderPage setColorScooter(String clientColor) {
 
@@ -105,6 +131,11 @@ public class OrderPage {
         if (clientColor.equals("grey")) {
             driver.findElement(scooterGreyColor).click();
         }
+        return this;
+    }
+
+    public OrderPage checkCommentEnabled() {
+        assertTrue(driver.findElement(commentCourier).isEnabled());
         return this;
     }
 
