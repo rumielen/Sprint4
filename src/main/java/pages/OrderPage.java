@@ -6,7 +6,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-import static io.ous.jtoml.impl.Token.TokenType.Key;
+
 import static org.junit.Assert.*;
 
 
@@ -20,7 +20,7 @@ public class OrderPage {
     private final By phoneField = (By.xpath(".//div/input[@placeholder='* Телефон: на него позвонит курьер']"));
     private final By nextButton = (By.xpath(".//button[@class='Button_Button__ra12g Button_Middle__1CSJM']"));
     private final By scooterDeliveryDate = (By.xpath(".//input[@placeholder='* Когда привезти самокат']"));
-    private final By calendarFieldChooseDate = (By.xpath(".//input[@class='react-datepicker__month']"));
+
     private final By fieldRentalPeriod = (By.xpath(".//div[@class='Dropdown-placeholder']"));
     private final By rentPeriodList = (By.xpath(".//div[@class='Dropdown-menu']"));
     private final By scooterBlackColor = (By.xpath(".//label[@for='black']"));
@@ -29,6 +29,8 @@ public class OrderPage {
     private final By doOrderButton = (By.xpath(".//button[@class='Button_Button__ra12g Button_Middle__1CSJM']"));
     private final By yesDoOrderButton = (By.xpath(".//button[text()='Да']"));
     private final By orderSuccessDone = (By.xpath(".//div[@class='Order_ModalHeader__3FDaJ']"));
+    private final By orderSuccessMessage = (By.xpath(".//div[@class='Order_Text__2broi']"));
+    boolean orderDoneSuccess;
     public OrderPage (WebDriver driver){
         this.driver = driver;
     }
@@ -161,7 +163,11 @@ public class OrderPage {
 
     public boolean orderSuccessDoneIsDisplayed() {
         boolean orderDoneSuccessWindowIsDisplayed = driver.findElement(orderSuccessDone).isDisplayed();
-        return orderDoneSuccessWindowIsDisplayed;
+        boolean orderDoneSuccessMessageIsDisplayed = driver.findElement(orderSuccessMessage).getText().contains("Номер заказа:");
+        if (orderDoneSuccessMessageIsDisplayed & orderDoneSuccessWindowIsDisplayed) {
+            orderDoneSuccess = true;
+        }
+        return orderDoneSuccess;
 
     }
 }

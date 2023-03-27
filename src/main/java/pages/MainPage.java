@@ -14,16 +14,15 @@ public class MainPage {
     private final By UpOrderButton = (By.className("Button_Button__ra12g"));
     private final By middleOrderButton = (By.xpath(".//button[@class='Button_Button__ra12g Button_Middle__1CSJM']"));
     private final By importantQuestionsList = (By.xpath(".//div[@class='accordion__button']"));
-    private final By importantQuestions =
-            (By.xpath(".//div[@data-accordion-component='AccordionItemHeading']"));
-    public String[] actualAnswers = new String[8];
+
+    public boolean isAnswerTextCorrect;
 
 
 
 
     public MainPage(WebDriver driver) {
         this.driver = driver;
-        this.actualAnswers = actualAnswers;
+
     }
 
 
@@ -40,7 +39,7 @@ public class MainPage {
     }
 
 
-    public MainPage clickImportantQuestion(String importantQuestionText) {
+    public boolean clickImportantQuestion(String importantQuestionText, String answerText) {
 
         List<WebElement> questionsList = driver.findElements(importantQuestionsList);
         for (WebElement questionItem : questionsList) {
@@ -51,9 +50,13 @@ public class MainPage {
                 By answerItem = RelativeLocator.with(By.tagName("p")).below(questionItem);
 
                 System.out.println(driver.findElement(answerItem).getText());
+                String answer = driver.findElement(answerItem).getText();
+                if(answer.contains(answerText)) {
+                    isAnswerTextCorrect = true;
+                }
             }
         }
-        return this;
+        return isAnswerTextCorrect;
     }
 
 }
